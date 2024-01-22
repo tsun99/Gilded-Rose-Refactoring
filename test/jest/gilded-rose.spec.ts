@@ -52,3 +52,42 @@ describe('Aged Brie', () => {
     expect(quality).toBe(50);
   });
 });
+
+describe('Sulfuras', () => {
+  it('Quality and sellIn is never updated', () => {
+    const gildedRose = new GildedRose([new Item('Sulfuras, Hand of Ragnaros', 1, 11)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).toBe(11);
+    expect(items[0].sellIn).toBe(1);
+  });
+});
+
+describe('Backstage passes', () => {
+  it('Quality increases by 1 when sellIn > 10', () => {
+    const gildedRose = new GildedRose([new Item('Backstage passes to a TAFKAL80ETC concert', 11, 15)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).toBe(16);
+    expect(items[0].sellIn).toBe(10);
+  })
+
+  it('Quality increases by 2 when sellIn <= 10', () => {
+    const gildedRose = new GildedRose([new Item('Backstage passes to a TAFKAL80ETC concert', 10, 15)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).toBe(17);
+    expect(items[0].sellIn).toBe(9);
+  })
+
+  it('Quality increases by 3 when sellIn <= 5', () => {
+    const gildedRose = new GildedRose([new Item('Backstage passes to a TAFKAL80ETC concert', 4, 15)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).toBe(18);
+    expect(items[0].sellIn).toBe(3);
+  })
+
+  it('Quality drops to 0 after sellIn becomes negative', () => {
+    const gildedRose = new GildedRose([new Item('Backstage passes to a TAFKAL80ETC concert', 0, 15)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).toBe(0);
+    expect(items[0].sellIn).toBe(-1);
+  })
+});
