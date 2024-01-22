@@ -68,26 +68,49 @@ describe('Backstage passes', () => {
     const items = gildedRose.updateQuality();
     expect(items[0].quality).toBe(16);
     expect(items[0].sellIn).toBe(10);
-  })
+  });
 
   it('should increase quality by 2 when sellIn <= 10', () => {
     const gildedRose = new GildedRose([new Item('Backstage passes to a TAFKAL80ETC concert', 10, 15)]);
     const items = gildedRose.updateQuality();
     expect(items[0].quality).toBe(17);
     expect(items[0].sellIn).toBe(9);
-  })
+  });
 
   it('should increase quality by 3 when sellIn <= 5', () => {
     const gildedRose = new GildedRose([new Item('Backstage passes to a TAFKAL80ETC concert', 4, 15)]);
     const items = gildedRose.updateQuality();
     expect(items[0].quality).toBe(18);
     expect(items[0].sellIn).toBe(3);
-  })
+  });
 
   it('it should drop quality to 0 after sellIn becomes negative', () => {
     const gildedRose = new GildedRose([new Item('Backstage passes to a TAFKAL80ETC concert', 0, 15)]);
     const items = gildedRose.updateQuality();
     expect(items[0].quality).toBe(0);
     expect(items[0].sellIn).toBe(-1);
-  })
+  });
+});
+
+describe('Conjured', () => {
+  it('should degrade quality by 2 when sellIn > 0', () => {
+    const gildedRose = new GildedRose([new Item('Conjured Mana Cake', 3, 10)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).toBe(8);
+    expect(items[0].sellIn).toBe(2);
+  });
+
+  it('should degrade quality by 4 when sellIn < 0', () => {
+    const gildedRose = new GildedRose([new Item('Conjured Mana Cake', 0, 10)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).toBe(6);
+    expect(items[0].sellIn).toBe(-1);
+  });
+
+  test('if quality never becomes less than 0', () => {
+    const gildedRose = new GildedRose([new Item('Conjured Mana Cake', -1, 2)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).toBe(0);
+    expect(items[0].sellIn).toBe(-2);
+  });
 });
