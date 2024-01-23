@@ -1,13 +1,11 @@
-export class Item {
-  name: string;
-  sellIn: number;
-  quality: number;
+import { Item } from "./Item";
 
-  constructor(name, sellIn, quality) {
-    this.name = name;
-    this.sellIn = sellIn;
-    this.quality = quality;
-  }
+enum ItemType {
+  AgedBrie = "Aged Brie",
+  BackstagePass = "Backstage passes to a TAFKAL80ETC concert",
+  Sulfuras = "Sulfuras, Hand of Ragnaros",
+  Conjured = "Conjured Mana Cake",
+  Normal = "Elixir of the Mongoose",
 }
 
 export class GildedRose {
@@ -18,52 +16,69 @@ export class GildedRose {
   }
 
   updateQuality() {
-    for (let i = 0; i < this.items.length; i++) {
-      if (this.items[i].name != 'Aged Brie' && this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-        if (this.items[i].quality > 0) {
-          if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-            this.items[i].quality = this.items[i].quality - 1
-          }
-        }
-      } else {
-        if (this.items[i].quality < 50) {
-          this.items[i].quality = this.items[i].quality + 1
-          if (this.items[i].name == 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].sellIn < 11) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1
-              }
-            }
-            if (this.items[i].sellIn < 6) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1
-              }
-            }
-          }
-        }
-      }
-      if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-        this.items[i].sellIn = this.items[i].sellIn - 1;
-      }
-      if (this.items[i].sellIn < 0) {
-        if (this.items[i].name != 'Aged Brie') {
-          if (this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].quality > 0) {
-              if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                this.items[i].quality = this.items[i].quality - 1
-              }
-            }
-          } else {
-            this.items[i].quality = this.items[i].quality - this.items[i].quality
-          }
-        } else {
-          if (this.items[i].quality < 50) {
-            this.items[i].quality = this.items[i].quality + 1
-          }
-        }
-      }
+    for (let item of this.items) {
+      this.updateItemQuality(item);
     }
 
     return this.items;
+  }
+
+  private updateItemQuality(item: Item) {
+    let qualityDegradeRate = this.calculateDegradeRate(item);
+    let doesItemDegrade: boolean =
+      !(item.name === ItemType.BackstagePass) &&
+      !(item.name === ItemType.AgedBrie) &&
+      !(item.name === ItemType.Sulfuras);
+
+    if (doesItemDegrade) {
+      this.changeQuality(item, qualityDegradeRate);
+    }
+
+    if (
+      item.name === ItemType.AgedBrie ||
+      item.name === ItemType.BackstagePass
+    ) {
+      this.changeQuality(item, 1);
+    }
+
+    if (item.name == ItemType.BackstagePass) {
+      if (item.sellIn < 11) {
+        this.changeQuality(item, 1);
+      }
+      if (item.sellIn < 6) {
+        this.changeQuality(item, 1);
+      }
+      if (item.sellIn <= 0) {
+        item.quality = 0;
+      }
+    }
+
+    if (item.name != ItemType.Sulfuras) {
+      item.sellIn = item.sellIn - 1;
+    }
+
+    if (item.sellIn < 0 && item.name === ItemType.AgedBrie) {
+      this.changeQuality(item, 1);
+    }
+
+  }
+
+  private changeQuality(item: Item, by: number) {
+    if (item.quality + by < 0) {
+      item.quality = 0;
+    } else if (item.quality + by > 50) {
+      item.quality = 50;
+    } else {
+      item.quality = item.quality + by;
+    }
+  }
+
+  private calculateDegradeRate(item: Item): number {
+    let degradeRate = item.name === ItemType.Conjured ? -2 : -1;
+    
+    if (item.sellIn <= 0) {
+      degradeRate *= 2;
+    }
+    return degradeRate;
   }
 }
