@@ -12,10 +12,10 @@ describe("making api request", () => {
     expect(result).toBe(true);
   });
 
-  it("should return galse when getting 'no"), async () => {
+  it("should return false when getting 'no'", async () => {
     jest.spyOn(require('axios'), 'get').mockResolvedValue({ data:  { answer: 'no'} });
 
     const result = await makeApiRequest();
     expect(result).toBe(false);
-  }
+  })
 });
