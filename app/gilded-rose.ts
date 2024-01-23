@@ -25,26 +25,18 @@ export class GildedRose {
 
   private updateItemQuality(item: Item) {
     if (item.name != ItemType.AgedBrie && item.name != ItemType.BackstagePass) {
-      if (item.quality > 0) {
         if (item.name != ItemType.Sulfuras) {
           this.changeQuality(item, -1);
         }
-      }
     } else {
-      if (item.quality < 50) {
         this.changeQuality(item, 1)
         if (item.name == ItemType.BackstagePass) {
           if (item.sellIn < 11) {
-            if (item.quality < 50) {
               this.changeQuality(item, 1)
-            }
           }
           if (item.sellIn < 6) {
-            if (item.quality < 50) {
               this.changeQuality(item, 1)
-            }
           }
-        }
       }
     }
     if (item.name != ItemType.Sulfuras) {
@@ -53,22 +45,21 @@ export class GildedRose {
     if (item.sellIn < 0) {
       if (item.name != ItemType.AgedBrie) {
         if (item.name != ItemType.BackstagePass) {
-          if (item.quality > 0) {
             if (item.name != ItemType.Sulfuras) {
               this.changeQuality(item, -1);
             }
-          }
         } else {
           item.quality = item.quality - item.quality
         }
       } else {
-        if (item.quality < 50) {
           this.changeQuality(item, 1);
-        }
       }
     }
   }
+
   private changeQuality(item: Item, by: number) {
-    item.quality = item.quality + by;
+    if(item.quality + by >= 0 && item.quality + by <= 50) {
+      item.quality = item.quality + by;
+    }
   }
 }
