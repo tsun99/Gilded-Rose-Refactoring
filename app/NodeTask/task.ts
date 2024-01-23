@@ -18,6 +18,15 @@ async function main() {
       
       const gildedRose = new GildedRose(items);
 
-      console.log(updates, requestsToApi);
+      for (let i = 0; i < updates; i++) {
+        let yesResponseNumber = requestsToApi;
+        while (yesResponseNumber > 0) {
+          //TODO: API call
+
+          //TODO: Response to log.txt
+        }
+        gildedRose.updateQuality();
+      }
 }
+
 main();
