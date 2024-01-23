@@ -1,6 +1,6 @@
 import { Item } from "./Item";
 
-enum itemType {
+enum ItemType {
   AgedBrie = 'Aged Brie',
   BackstagePass = 'Backstage passes to a TAFKAL80ETC concert',
   Sulfuras = 'Sulfuras, Hand of Ragnaros',
@@ -24,38 +24,38 @@ export class GildedRose {
   }
 
   private updateItemQuality(item: Item) {
-    if (item.name != itemType.AgedBrie && item.name != itemType.BackstagePass) {
+    if (item.name != ItemType.AgedBrie && item.name != ItemType.BackstagePass) {
       if (item.quality > 0) {
-        if (item.name != itemType.Sulfuras) {
-          item.quality = item.quality - 1
+        if (item.name != ItemType.Sulfuras) {
+          this.changeQuality(item, -1);
         }
       }
     } else {
       if (item.quality < 50) {
-        item.quality = item.quality + 1
-        if (item.name == itemType.BackstagePass) {
+        this.changeQuality(item, 1)
+        if (item.name == ItemType.BackstagePass) {
           if (item.sellIn < 11) {
             if (item.quality < 50) {
-              item.quality = item.quality + 1
+              this.changeQuality(item, 1)
             }
           }
           if (item.sellIn < 6) {
             if (item.quality < 50) {
-              item.quality = item.quality + 1
+              this.changeQuality(item, 1)
             }
           }
         }
       }
     }
-    if (item.name != itemType.Sulfuras) {
+    if (item.name != ItemType.Sulfuras) {
       item.sellIn = item.sellIn - 1;
     }
     if (item.sellIn < 0) {
-      if (item.name != itemType.AgedBrie) {
-        if (item.name != itemType.BackstagePass) {
+      if (item.name != ItemType.AgedBrie) {
+        if (item.name != ItemType.BackstagePass) {
           if (item.quality > 0) {
-            if (item.name != itemType.Sulfuras) {
-              item.quality = item.quality - 1
+            if (item.name != ItemType.Sulfuras) {
+              this.changeQuality(item, -1);
             }
           }
         } else {
@@ -63,9 +63,12 @@ export class GildedRose {
         }
       } else {
         if (item.quality < 50) {
-          item.quality = item.quality + 1
+          this.changeQuality(item, 1);
         }
       }
     }
+  }
+  private changeQuality(item: Item, by: number) {
+    item.quality = item.quality + by;
   }
 }
