@@ -25,21 +25,25 @@ export class GildedRose {
 
   private updateItemQuality(item: Item) {
     let qualityDegradeRate = item.name === ItemType.Conjured ? -2 : -1;
-    if (item.name != ItemType.AgedBrie && item.name != ItemType.BackstagePass) {
-      if (item.name != ItemType.Sulfuras) {
-        this.changeQuality(item, qualityDegradeRate);
-      }
-    } else {
+    let doesItemDegrade: boolean = !(item.name === ItemType.BackstagePass) && !(item.name === ItemType.AgedBrie) && !(item.name === ItemType.Sulfuras);
+
+    if (doesItemDegrade) {
+      this.changeQuality(item, qualityDegradeRate)
+    }
+
+    if (item.name === ItemType.AgedBrie || item.name === ItemType.BackstagePass) {
       this.changeQuality(item, 1);
-      if (item.name == ItemType.BackstagePass) {
-        if (item.sellIn < 11) {
-          this.changeQuality(item, 1);
-        }
-        if (item.sellIn < 6) {
-          this.changeQuality(item, 1);
-        }
+    }
+
+    if (item.name == ItemType.BackstagePass) {
+      if (item.sellIn < 11) {
+        this.changeQuality(item, 1);
+      }
+      if (item.sellIn < 6) {
+        this.changeQuality(item, 1);
       }
     }
+
     if (item.name != ItemType.Sulfuras) {
       item.sellIn = item.sellIn - 1;
     }
