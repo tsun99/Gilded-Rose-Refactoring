@@ -24,14 +24,20 @@ export class GildedRose {
   }
 
   private updateItemQuality(item: Item) {
-    let qualityDegradeRate = item.name === ItemType.Conjured ? -2 : -1;
-    let doesItemDegrade: boolean = !(item.name === ItemType.BackstagePass) && !(item.name === ItemType.AgedBrie) && !(item.name === ItemType.Sulfuras);
+    let qualityDegradeRate = this.calculateDegradeRate(item);
+    let doesItemDegrade: boolean =
+      !(item.name === ItemType.BackstagePass) &&
+      !(item.name === ItemType.AgedBrie) &&
+      !(item.name === ItemType.Sulfuras);
 
     if (doesItemDegrade) {
-      this.changeQuality(item, qualityDegradeRate)
+      this.changeQuality(item, qualityDegradeRate);
     }
 
-    if (item.name === ItemType.AgedBrie || item.name === ItemType.BackstagePass) {
+    if (
+      item.name === ItemType.AgedBrie ||
+      item.name === ItemType.BackstagePass
+    ) {
       this.changeQuality(item, 1);
     }
 
@@ -42,29 +48,35 @@ export class GildedRose {
       if (item.sellIn < 6) {
         this.changeQuality(item, 1);
       }
+      if (item.sellIn <= 0) {
+        item.quality = 0;
+      }
     }
 
     if (item.name != ItemType.Sulfuras) {
       item.sellIn = item.sellIn - 1;
     }
-    if (item.sellIn < 0) {
-      if (item.name != ItemType.AgedBrie) {
-        if (item.name != ItemType.BackstagePass) {
-          if (item.name != ItemType.Sulfuras) {
-            this.changeQuality(item, qualityDegradeRate);
-          }
-        } else {
-          item.quality = item.quality - item.quality;
-        }
-      } else {
-        this.changeQuality(item, 1);
-      }
+
+    if (item.sellIn < 0 && item.name === ItemType.AgedBrie) {
+      this.changeQuality(item, 1);
     }
   }
 
   private changeQuality(item: Item, by: number) {
-    if (item.quality + by >= 0 && item.quality + by <= 50) {
+    if (item.quality + by < 0) {
+      item.quality = 0;
+    } else if (item.quality + by > 50) {
+      item.quality = 50;
+    } else {
       item.quality = item.quality + by;
     }
+  }
+
+  private calculateDegradeRate(item: Item): number {
+    let degradeRate = item.name === ItemType.Conjured ? -2 : -1;
+    if (item.sellIn <= 0) {
+      degradeRate *= 2;
+    }
+    return degradeRate;
   }
 }
