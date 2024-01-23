@@ -5,7 +5,6 @@ enum ItemType {
   BackstagePass = "Backstage passes to a TAFKAL80ETC concert",
   Sulfuras = "Sulfuras, Hand of Ragnaros",
   Conjured = "Conjured Mana Cake",
-  Normal = "Elixir of the Mongoose",
 }
 
 export class GildedRose {

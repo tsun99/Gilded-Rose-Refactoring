@@ -1,6 +1,6 @@
-# Gilded Rose
+# Gilded Rose + Node task
 
-This is the Gilded Rose kata in TypeScript.
+This is the Gilded Rose kata in TypeScript. In this repo there are two tasks that I worked on. The first one - implementation of unit tests and refactoring of the application. The other task was to create a way for the user to provide the amount of times the shop should be refreshed, and how many times the yesno.wtf/api should be called.
 
 ## Getting started
 
@@ -12,40 +12,17 @@ npm install
 
 ## Run the unit tests from the Command-Line
 
-There are two unit test frameworks to choose from, Jest and Mocha.
-
 ```sh
 npm run test:jest
 ```
 
-To run all tests in watch mode
 
+## Run the node task to refresh shop and call API
+
+User must provide the number of times shop should be updated, and how many times to call the API for every iteration as args:
 ```sh
-npm run test:jest:watch
+npx ts-node app/NodeTask/task.ts 5 6
 ```
 
-
-## Run the TextTest fixture from the Command-Line
-
-_You may need to install `ts-node`_
-
-```sh
-npx ts-node test/golden-master-text-test.ts
-```
-
-Or with number of days as args:
-```sh
-npx ts-node test/golden-master-text-test.ts 10
-```
-
-You should make sure the command shown above works when you execute it in a terminal before trying to use TextTest (see below).
-
-
-## Run the TextTest approval test that comes with this project
-
-There are instructions in the [TextTest Readme](../texttests/README.md) for setting up TextTest. You will need to specify the Python executable and interpreter in [config.gr](../texttests/config.gr). Uncomment these lines:
-
-    executable:${TEXTTEST_HOME}/python/texttest_fixture.py
-    interpreter:python
-
+The API will be called as long as there is atleast a single 'yes' received as a response. The amount of times it will be called depend on the user input and the previous api responses. The positive responses are logged in a Log.txt file.
 
