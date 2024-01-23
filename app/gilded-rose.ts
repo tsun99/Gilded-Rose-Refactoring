@@ -60,6 +60,7 @@ export class GildedRose {
     if (item.sellIn < 0 && item.name === ItemType.AgedBrie) {
       this.changeQuality(item, 1);
     }
+
   }
 
   private changeQuality(item: Item, by: number) {
@@ -74,6 +75,7 @@ export class GildedRose {
 
   private calculateDegradeRate(item: Item): number {
     let degradeRate = item.name === ItemType.Conjured ? -2 : -1;
+    
     if (item.sellIn <= 0) {
       degradeRate *= 2;
     }
