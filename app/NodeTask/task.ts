@@ -1,5 +1,6 @@
 import { Item } from "../Item";
 import { GildedRose } from "../gilded-rose";
+import { makeApiRequest } from './api';
 
 async function main() {
     const updates = parseInt(process.argv[2]);
@@ -21,10 +22,15 @@ async function main() {
       for (let i = 0; i < updates; i++) {
         let yesResponseNumber = requestsToApi;
         while (yesResponseNumber > 0) {
-          //TODO: API call
-
+          const apiResponses = await Promise.all(Array.from({length: yesResponseNumber}, makeApiRequest));
+          yesResponseNumber = apiResponses.filter(response => response === true).length;
+          
+          
           //TODO: Response to log.txt
+          console.log(apiResponses);
+          console.log(yesResponseNumber);
         }
+        break;
         gildedRose.updateQuality();
       }
 }
