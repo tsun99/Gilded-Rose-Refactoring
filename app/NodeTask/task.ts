@@ -28,7 +28,7 @@ async function main() {
     let yesResponseCount = requestsToApi;
 
     while (yesResponseCount > 0) {
-      // Promise.all returns a single boolean[] promise. If any of the requests fail, rejects.
+      // Promise.all returns a single boolean[]. If any of the requests fail, rejects.
       const apiResponses = await Promise.all(
         Array.from({ length: yesResponseCount }, makeApiRequest)
       );
@@ -45,7 +45,7 @@ async function main() {
 
     gildedRose.updateQuality();
 
-    // console.log(gildedRose.items[1]);
+    // console.log(gildedRose.items[6]);
   }
 }
 

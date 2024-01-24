@@ -56,9 +56,9 @@ describe('Aged Brie', () => {
 
 describe('Sulfuras', () => {
   it('should not update quality and sellIn', () => {
-    const gildedRose = new GildedRose([new Item('Sulfuras, Hand of Ragnaros', 1, 11)]);
+    const gildedRose = new GildedRose([new Item('Sulfuras, Hand of Ragnaros', 1, 80)]);
     const items = gildedRose.updateQuality();
-    expect(items[0].quality).toBe(11);
+    expect(items[0].quality).toBe(80);
     expect(items[0].sellIn).toBe(1);
   });
 });
